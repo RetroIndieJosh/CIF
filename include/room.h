@@ -4,6 +4,6 @@
 #include <stdbool.h>
 
 int room_create(const char *name, const char *desc);
-bool room_show(int id);
+bool room_print(int id);
 
 #endif // ROOM_H

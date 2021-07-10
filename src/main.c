@@ -8,9 +8,11 @@ int location = 0;
 
 int main() {
         int id = room_create("Kitchen", "A boring place to cook.");
-        printf("Created room %d\n", id);
+        printf("Created room %d:\n\n", id);
+        room_print(id);
         id = room_create("Bedroom", "There's a bed here.");
-        printf("Created room %d\n", id);
+        printf("\nCreated room %d:\n\n", id);
+        room_print(id);
 
         // prompt
         printf(">> ");

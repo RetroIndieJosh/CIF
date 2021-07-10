@@ -14,9 +14,10 @@ struct Room {
 struct Room room_list[32];
 int room_count = 0;
 
-void string_copy(char *to, const char *from, int max_length) {
+void string_copy(char *to, const char *from, size_t max_length) {
         if(strlen(from) > max_length)
-                fprintf(stderr, "String copy exceeds max length %d", max_length);
+                fprintf(stderr, "String copy exceeds max length %zu", max_length);
+        strncpy(to, from, max_length);
 }
 
 int room_create(const char *name, const char *desc) {
