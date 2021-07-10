@@ -1,9 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "room.h"
 #include "parser.h"
 
+int location = 0;
+
 int main() {
+        int id = room_create("Kitchen", "A boring place to cook.");
+        printf("Created room %d\n", id);
+        id = room_create("Bedroom", "There's a bed here.");
+        printf("Created room %d\n", id);
+
+        // prompt
+        printf(">> ");
         char input[32];
         if(fgets(input, 32, stdin) == NULL) {
                 printf("Error processing input.");
