@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "item.h"
 #include "room.h"
 #include "parser.h"
 #include "text.h"
@@ -9,10 +10,17 @@ int location = 0;
 
 int main() {
         int id = room_create("Kitchen", "A boring place to cook.");
-        print("Created room %d:\n\n", id);
+        room_place_item(id,
+                item_create("knife", "It's sharp")
+                );
+        room_place_item(id,
+                item_create("spatula", "Flips burgers and pancakes")
+                );
+        print("Created room %d:\n", id);
         room_print(id);
+
         id = room_create("Bedroom", "There's a bed here.");
-        print("\nCreated room %d:\n\n", id);
+        print("Created room %d:\n", id);
         room_print(id);
 
         // prompt
