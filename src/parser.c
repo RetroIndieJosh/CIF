@@ -2,13 +2,14 @@
 #include <string.h>
 
 #include "parser.h"
+#include "text.h"
 
 char tokens[4][8];
 int token_count = 0;
 
 const char *get_token(int index) {
         if(index >= token_count)
-                fprintf(stderr, "Invalid token index %d (%d tokens)", index, token_count);
+                print_error("Invalid token index %d (%d tokens)", index, token_count);
         return tokens[index];
 }
 
@@ -26,7 +27,7 @@ void process_tokens(const char * input) {
                 start = i + 1;
                 ++token_count;
                 if(token_count >= 4) {
-                        fprintf(stderr, "Too many tokens; ignoring after char %d\n", i);
+                        print_error("Too many tokens; ignoring after char %d\n", i);
                         return;
                 }
         }
@@ -37,7 +38,7 @@ void process_tokens(const char * input) {
 void split_token(const char * input, int index, int start, int end) {
         int length = end - start;
         if(length > 8)
-                fprintf(stderr, "Token too long (%d > 8\n", length);
+                print_error("Token too long (%d > 8\n", length);
         strncpy(tokens[index], input+start, length);
 }
 

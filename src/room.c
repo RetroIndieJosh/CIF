@@ -1,36 +1,30 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "limits.h"
+#include "item.h"
 #include "room.h"
-
-#define MAX_ROOM_NAME_LENGTH 32
-#define MAX_ROOM_DESC_LENGTH 256
+#include "text.h"
 
 struct Room {
-        char name[MAX_ROOM_NAME_LENGTH];
-        char desc[MAX_ROOM_DESC_LENGTH];
+        int self_item_id;
 };
 
 struct Room room_list[32];
 int room_count = 0;
 
-void string_copy(char *to, const char *from, size_t max_length) {
-        if(strlen(from) > max_length)
-                fprintf(stderr, "String copy exceeds max length %zu", max_length);
-        strncpy(to, from, max_length);
-}
-
 int room_create(const char *name, const char *desc) {
-        string_copy(room_list[room_count].name, name, MAX_ROOM_NAME_LENGTH);
-        string_copy(room_list[room_count].desc, desc, MAX_ROOM_DESC_LENGTH);
+        room_list[room_count].self_item_id = item_create(name, desc);
         return room_count++;
 }
 
 bool room_print(int id) {
-        if(id >= room_count) {
-                fprintf(stderr, "Room ID %d exceeds max id %d", id, room_count - 1);
+        if(check_id("room", id, MAX_ROOMS) == false)
                 return false;
-        }
-        printf("-= %s =-\n%s\n", room_list[id].name, room_list[id].desc);
+        print("-= ");
+        item_print_name(room_list[id].self_item_id);
+        print(" =-\n");
+        item_print_desc(room_list[id].self_item_id);
+        print("\n\n");
         return true;
 }
