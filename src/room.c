@@ -27,6 +27,8 @@ bool room_check_id(int room_id) {
 }
 
 int room_create(const char *name, const char *desc) {
+        if(room_count >= MAX_ROOMS)
+                return false;
         room_list[room_count].self_item_id = item_create(name, desc);
         room_list[room_count].item_count = 0;
         return room_count++;
@@ -35,7 +37,9 @@ int room_create(const char *name, const char *desc) {
 bool room_place_item(int room_id, int item_id) {
         if(room_check_id(room_id) == false || item_check_id(item_id) == false)
                 return false;
-        room_list[room_count].item_count++;
+        int i = room_list[room_id].item_count;
+        room_list[room_id].item_list[i] = item_id;
+        room_list[room_id].item_count++;
         return true;
 }
 

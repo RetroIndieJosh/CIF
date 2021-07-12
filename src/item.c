@@ -16,6 +16,8 @@ bool item_check_id(int item_id) {
 }
 
 int item_create(const char *name, const char *desc) {
+        if(item_count >= MAX_ITEMS)
+                return -1;
         string_copy(item_list[item_count].name, name, MAX_NAME_LEN);
         string_copy(item_list[item_count].desc, desc, MAX_DESC_LEN);
         return item_count++;
