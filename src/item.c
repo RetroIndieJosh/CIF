@@ -6,6 +6,8 @@
 struct Item {
         char name[MAX_NAME_LEN];
         char desc[MAX_DESC_LEN];
+        int location;
+        int type;
 };
 
 struct Item item_list[MAX_ITEMS];
@@ -18,9 +20,18 @@ bool item_check_id(int item_id) {
 int item_create(const char *name, const char *desc) {
         if(item_count >= MAX_ITEMS)
                 return -1;
-        string_copy(item_list[item_count].name, name, MAX_NAME_LEN);
-        string_copy(item_list[item_count].desc, desc, MAX_DESC_LEN);
+        struct Item *cur_item = &item_list[item_count];
+        string_copy(cur_item->name, name, MAX_NAME_LEN);
+        string_copy(cur_item->desc, desc, MAX_DESC_LEN);
+        cur_item->location = -1;
+        cur_item->type = ITYPE_ITEM;
         return item_count++;
+}
+
+int item_create_type(const char *name, const char *desc, int type) {
+        int item_id = item_create(name, desc);
+        item_list[item_id].type = type;
+        return item_id;
 }
 
 // returns -1 for not found
@@ -30,7 +41,6 @@ int item_get_id(const char *item_name) {
                         continue;
                 return i;
         }
-        print_error("No item by name '%s'\n", item_name);
         return -1;
 }
 

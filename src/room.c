@@ -26,10 +26,18 @@ bool room_check_id(int room_id) {
         return check_id("room", room_id, room_count);
 }
 
+bool room_contains(int room_id, int item_id) {
+        for(int i = 0; i < ITEMS_PER_ROOM; ++i) {
+                if(room_list[room_id].item_list[i] == item_id)
+                        return true;
+        }
+        return false;
+}
+
 int room_create(const char *name, const char *desc) {
         if(room_count >= MAX_ROOMS)
                 return false;
-        room_list[room_count].self_item_id = item_create(name, desc);
+        room_list[room_count].self_item_id = item_create_type(name, desc, ITYPE_ROOM);
         room_list[room_count].item_count = 0;
         return room_count++;
 }

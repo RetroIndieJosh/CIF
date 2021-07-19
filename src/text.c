@@ -11,6 +11,15 @@ int print(const char *format, ...) {
         return chars;
 }
 
+int printl(const char *format, ...) {
+        va_list args;
+        va_start(args, format);
+        int chars = vfprintf(stdout, format, args);
+        fprintf(stdout, "\n");
+        va_end(args);
+        return chars;
+}
+
 int print_error(const char *format, ...) {
         va_list args;
         va_start(args, format);

@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "command.h"
+#include "game.h"
 #include "item.h"
 #include "room.h"
 #include "text.h"
@@ -19,14 +20,14 @@ int main() {
         room_place_item(id,
                 item_create("spatula", "Flips burgers and pancakes")
                 );
-        print("Created room %d:\n", id);
+        printl("Created room %d:", id);
         room_print(id);
 
         id = room_create("Bedroom", "There's a bed here.");
-        print("Created room %d:\n", id);
+        printl("Created room %d:", id);
         room_print(id);
 
-         while(true) {
+        while(game_ended() == false) {
                 // prompt
                 print(">> ");
                 char input[32];
@@ -35,7 +36,7 @@ int main() {
                         return 1;
                 }
                 command_execute(input);
-                print("\n");
+                printl("");
          }
 
         return 0;
