@@ -2,6 +2,6 @@
 #define GAME_H
 
 void game_end();
-bool game_ended();
+bool game_is_over();
 
 #endif // GAME_H

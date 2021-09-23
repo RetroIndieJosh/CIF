@@ -9,7 +9,8 @@
 
 int location = 0;
 
-int main() {
+int main() 
+{
         command_init();
         room_create("Inventory", "");
 
@@ -27,7 +28,7 @@ int main() {
         printl("Created room %d:", id);
         room_print(id);
 
-        while(game_ended() == false) {
+        while (game_is_over() == false) {
                 // prompt
                 print(">> ");
                 char input[32];

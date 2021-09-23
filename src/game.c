@@ -4,10 +4,12 @@
 
 bool game_running = true;
 
-void game_end() {
+void game_end() 
+{
         game_running = false;
 }
 
-bool game_ended() {
+bool game_is_over() 
+{
         return game_running == false;
 }

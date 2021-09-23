@@ -3,7 +3,8 @@
 
 #include "text.h"
 
-int print(const char *format, ...) {
+int print(const char *format, ...) 
+{
         va_list args;
         va_start(args, format);
         int chars = vfprintf(stdout, format, args);
@@ -11,7 +12,8 @@ int print(const char *format, ...) {
         return chars;
 }
 
-int printl(const char *format, ...) {
+int printl(const char *format, ...) 
+{
         va_list args;
         va_start(args, format);
         int chars = vfprintf(stdout, format, args);
@@ -20,7 +22,8 @@ int printl(const char *format, ...) {
         return chars;
 }
 
-int print_error(const char *format, ...) {
+int print_error(const char *format, ...) 
+{
         va_list args;
         va_start(args, format);
         int chars = vfprintf(stderr, format, args);
@@ -28,8 +31,9 @@ int print_error(const char *format, ...) {
         return chars;
 }
 
-void string_copy(char *to, const char *from, size_t max_length) {
-        if(strlen(from) > max_length)
+void string_copy(char *to, const char *from, size_t max_length) 
+{
+        if (strlen(from) > max_length)
                 print_error("String copy exceeds max length %zu\n", max_length);
         memset(to, 0, max_length);
         strncpy(to, from, max_length);
