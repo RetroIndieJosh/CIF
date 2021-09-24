@@ -5,7 +5,7 @@
 
 bool is_whitespace(char ch) 
 {
-        return ch == ' ' || ch == '\n' || ch == '\t';
+        return ch != '\0' && (ch == ' ' || ch == '\n' || ch == '\t');
 }
 
 int print(const char *format, ...) 

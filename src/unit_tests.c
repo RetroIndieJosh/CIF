@@ -108,7 +108,7 @@ int test_run_all()
                 return ret;
         }
 
-        printl("All tests run successfully.");
+        printl("All tests passed successfully.");
         return 0;
 }
 
@@ -158,16 +158,32 @@ int test_run_parser()
         TEST("short and long, short #0 full", test_string, parser_get_token(0), "one");
         TEST("short and long, long #1 concatenated", test_string, parser_get_token(1), "supercalif");
 
+        parser_process("spacious  vibes");
+        TEST("two spaces #0", test_string, parser_get_token(0), "spacious");
+        TEST("two spaces #1", test_string, parser_get_token(1), "vibes");
+
+        parser_process("spacious\tvibes");
+        TEST("tab separator #0", test_string, parser_get_token(0), "spacious");
+        TEST("tab separator #1", test_string, parser_get_token(1), "vibes");
+
+        parser_process("spacious\nvibes");
+        TEST("newline separator #0", test_string, parser_get_token(0), "spacious");
+        TEST("newline separator #1", test_string, parser_get_token(1), "vibes");
+
+        parser_process("spacious \t\nvibes");
+        TEST("mixed separators #0", test_string, parser_get_token(0), "spacious");
+        TEST("mixed separators #1", test_string, parser_get_token(1), "vibes");
+
         parser_process("three blind mice");
-        TEST("three tokens, #0", test_string, parser_get_token(0), "three");
-        TEST("three tokens, #0", test_string, parser_get_token(1), "blind");
-        TEST("three tokens, #0", test_string, parser_get_token(2), "mice");
+        TEST("three tokens #0", test_string, parser_get_token(0), "three");
+        TEST("three tokens #1", test_string, parser_get_token(1), "blind");
+        TEST("three tokens #2", test_string, parser_get_token(2), "mice");
 
         parser_process("this has four tokens");
-        TEST("four tokens (drop final), #0", test_string, parser_get_token(0), "this");
-        TEST("four tokens (drop final), #1", test_string, parser_get_token(1), "has");
-        TEST("four tokens (drop final), #2", test_string, parser_get_token(2), "four");
-        TEST("four tokens (drop final), #3", test_string, parser_get_token(3), NULL);
+        TEST("four tokens (drop final) #0", test_string, parser_get_token(0), "this");
+        TEST("four tokens (drop final) #1", test_string, parser_get_token(1), "has");
+        TEST("four tokens (drop final) #2", test_string, parser_get_token(2), "four");
+        TEST("four tokens (drop final) #3", test_string, parser_get_token(3), NULL);
 
         // TODO stress test macro
         printf("Stress testing...");

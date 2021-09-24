@@ -29,14 +29,17 @@ void parser_process(const char * input)
         int start = 0;
         token_count = 0;
         for (int end = 0; end < strlen(input); ++end) {
-                if (input[end] != ' ')
+                if (is_whitespace(input[end]) == false) {
                        continue;
-                split_token(input, token_count, start, end);
-                start = end + 1;
-                ++token_count;
-                if (token_count >= TOKEN_COUNT) {
-                        return;
                 }
+                if(start < end) {
+                        split_token(input, token_count, start, end);
+                        ++token_count;
+                        if (token_count >= TOKEN_COUNT) {
+                                return;
+                        }
+                }
+                start = end + 1;
         }
 
         split_token(input, token_count, start, strlen(input) - 1);
@@ -49,7 +52,16 @@ void parser_process(const char * input)
 
 void split_token(const char * input, int index, int start, int end) 
 {
-        // clean whitespace
+        if(start >= end)
+                return;
+
+        // trim leading whitespace
+        for (int i = 0; i < start; ++i) {
+                if(is_whitespace(input[start]))
+                        ++start;
+        }
+
+        // trim trailing whitespace
         for (int i = end - 1; i >= 0; --i) {
                 if(is_whitespace(input[end]))
                         --end;
