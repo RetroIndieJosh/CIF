@@ -3,6 +3,11 @@
 
 #include "text.h"
 
+bool is_empty(const char *msg) 
+{
+        return !strcmp(msg, "");
+}
+
 bool is_whitespace(char ch) 
 {
         return ch != '\0' && (ch == ' ' || ch == '\n' || ch == '\t');

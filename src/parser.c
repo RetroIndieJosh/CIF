@@ -18,7 +18,7 @@ void split_token(const char * input, int index, int start, int end);
 const char *parser_get_token(int index) 
 {
         if (index >= token_count) {
-                return NULL;
+                return "";
         }
         return tokens[index];
 }

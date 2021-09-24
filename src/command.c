@@ -5,9 +5,12 @@
 #include "game.h"
 #include "item.h"
 #include "limits.h"
-#include "room.h"
 #include "parser.h"
+#include "room.h"
 #include "text.h"
+
+// commands return whether a turn has been taken
+// in future, commands will have turn length and return int
 
 struct Command {
         char verb[TOKEN_LEN];
@@ -51,8 +54,9 @@ bool command_execute(const char *input)
 {
         parser_process(input);
         const char *verb = parser_get_token(0);
-        if (verb == NULL)
+        if (verb == NULL || is_empty(verb)) {
                 return false;
+        }
         const char *noun1 = parser_get_token(1);
         const char *noun2 = parser_get_token(2);
         for (int i = 0; i < command_count; ++i) {
@@ -72,17 +76,18 @@ bool command_drop(const char *noun1, const char *noun2)
 
 bool command_get(const char *noun1, const char *noun2) 
 {
-        if (noun1 == NULL) {
+        if (is_empty(noun1)) {
                 printl("What would you like to get?");
                 return false;
         }
         // TODO check item location is player current room 
         int item_id = item_get_id(noun1);
         if (item_id < 0) {
-                if (noun2 == NULL)
+                if (is_empty(noun2)) {
                         printl("You see no %s here.", noun1);
-                else
+                } else {
                         printl("You see no %s %s here.", noun1, noun2);
+                }
                 return false;
         }
         print("Get %s %s\n", noun1, noun2);
@@ -97,15 +102,17 @@ bool command_inventory(const char *noun1, const char *noun2)
 
 bool command_look(const char *noun1, const char *noun2) 
 {
-        print("Look %s %s\n", noun1, noun2);
+        if (!is_empty(noun1) || !is_empty(noun2)) {
+            printl("Just 'look' will suffice.");
+            return false;
+        }
+
         struct Room *room = room_get(game_cur_room_id());
-        print("-= ");
-        item_print_name(room->self_item_id);
-        print(" =-\n");
-        item_print_desc(room->self_item_id);
-        print("\n");
-        //room_list_items(room_id);
-        //print("\n");
+        struct Item *room_item = item_get(room->self_item_id);
+
+        printl("-= %s =-", room_item->name);
+        printl("%s", room_item->desc);
+
         return false;
 }
 

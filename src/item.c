@@ -3,13 +3,6 @@
 #include "item.h"
 #include "text.h"
 
-struct Item {
-        char name[MAX_NAME_LEN];
-        char desc[MAX_DESC_LEN];
-        int location;
-        int type;
-};
-
 struct Item item_list[MAX_ITEMS];
 int item_count = 0;
 
@@ -30,7 +23,7 @@ int item_create(const char *name, const char *desc)
         return item_count++;
 }
 
-int item_create_type(const char *name, const char *desc, int type) 
+int item_create_type(const char *name, const char *desc, enum ItemType type) 
 {
         int item_id = item_create(name, desc);
         item_list[item_id].type = type;
@@ -48,19 +41,9 @@ int item_get_id(const char *item_name)
         return -1;
 }
 
-bool item_print_desc(int item_id) 
+struct Item *item_get(int id)
 {
-        if (item_check_id(item_id) == false)
-                return false;
-        print("%s", item_list[item_id].desc);
-        return true;
+        if (item_check_id(id) == false)
+                return NULL;
+        return &item_list[id];
 }
-
-bool item_print_name(int item_id) 
-{
-        if (item_check_id(item_id) == false)
-                return false;
-        print("%s", item_list[item_id].name);
-        return true;
-}
-

@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "limits.h"
+
 struct Room {
         int self_item_id;
         int item_list[ITEMS_PER_ROOM];

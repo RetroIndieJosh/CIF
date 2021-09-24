@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "limits.h"
 #include "item.h"
 #include "room.h"
 #include "text.h"
@@ -66,8 +65,8 @@ void room_list_items(int room_id)
         if (room_list[room_id].item_count == 0)
                 return;
         for (int i = 0; i < room_list[room_id].item_count; ++i) {
-                item_print_name(room_list[room_id].item_list[i]);
-                print(" ");
+                struct Item *item = item_get(room_list[room_id].item_list[i]);
+                print("%s ", item->name);
         }
         print("\n");
 }
