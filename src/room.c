@@ -6,12 +6,6 @@
 #include "room.h"
 #include "text.h"
 
-struct Room {
-        int self_item_id;
-        int item_list[ITEMS_PER_ROOM];
-        int item_count;
-};
-
 struct Room room_list[32];
 int room_count = 0;
 
@@ -55,18 +49,11 @@ bool room_place_item(int room_id, int item_id)
         return true;
 }
 
-bool room_print(int room_id) 
+struct Room *room_get(int room_id) 
 {
         if (room_check_id(room_id) == false)
-                return false;
-        print("-= ");
-        item_print_name(room_list[room_id].self_item_id);
-        print(" =-\n");
-        item_print_desc(room_list[room_id].self_item_id);
-        print("\n");
-        room_list_items(room_id);
-        print("\n");
-        return true;
+                return NULL;
+        return &room_list[room_id];
 }
 
 // 

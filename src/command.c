@@ -5,6 +5,7 @@
 #include "game.h"
 #include "item.h"
 #include "limits.h"
+#include "room.h"
 #include "parser.h"
 #include "text.h"
 
@@ -22,8 +23,6 @@ bool command_inventory(const char *noun1, const char *noun2);
 bool command_look(const char *noun1, const char *noun2);
 bool command_quit(const char *noun1, const char *noun2);
 bool command_use(const char *noun1, const char *noun2);
-
-bool command_exec(const char *input);
 
 int command_add(const char *verb, bool (*func)(const char*, const char*)) 
 {
@@ -99,6 +98,14 @@ bool command_inventory(const char *noun1, const char *noun2)
 bool command_look(const char *noun1, const char *noun2) 
 {
         print("Look %s %s\n", noun1, noun2);
+        struct Room *room = room_get(game_cur_room_id());
+        print("-= ");
+        item_print_name(room->self_item_id);
+        print(" =-\n");
+        item_print_desc(room->self_item_id);
+        print("\n");
+        //room_list_items(room_id);
+        //print("\n");
         return false;
 }
 
