@@ -1,6 +1,7 @@
 build/**
 *.pyc
 *.swp
+*.swo
 doc/**
 tags
 cscope.*
