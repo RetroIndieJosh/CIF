@@ -141,8 +141,14 @@ int test_run_parser()
         parser_process("one");
         TEST("short token, full", test_string, parser_get_token(0), "one");
 
+        parser_process("one\n");
+        TEST("short token, full, newline", test_string, parser_get_token(0), "one");
+
         parser_process("supercalifrajilisticexpealidocious");
         TEST("long token, concatenated", test_string, parser_get_token(0), "supercalif");
+
+        parser_process("supercalifrajilisticexpealidocious\n");
+        TEST("long token, concatenated, newline", test_string, parser_get_token(0), "supercalif");
 
         parser_process("supercalifrajilisticexpealidocious one");
         TEST("long and short, long #0 concatenated", test_string, parser_get_token(0), "supercalif");
