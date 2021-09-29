@@ -3,17 +3,20 @@
 
 #include "text.h"
 
-bool is_empty(const char *msg) 
+bool 
+is_empty(const char *msg) 
 {
         return !strcmp(msg, "");
 }
 
-bool is_whitespace(char ch) 
+bool 
+is_whitespace(char ch) 
 {
         return ch != '\0' && (ch == ' ' || ch == '\n' || ch == '\t');
 }
 
-int print(const char *format, ...) 
+int 
+print(const char *format, ...) 
 {
         va_list args;
         va_start(args, format);
@@ -22,7 +25,8 @@ int print(const char *format, ...)
         return chars;
 }
 
-int printl(const char *format, ...) 
+int 
+printl(const char *format, ...) 
 {
         va_list args;
         va_start(args, format);
@@ -32,7 +36,8 @@ int printl(const char *format, ...)
         return chars;
 }
 
-int print_error(const char *format, ...) 
+int 
+print_error(const char *format, ...) 
 {
         va_list args;
         va_start(args, format);
@@ -41,7 +46,8 @@ int print_error(const char *format, ...)
         return chars;
 }
 
-void string_copy(char *to, const char *from, size_t max_length) 
+void 
+string_copy(char *to, const char *from, size_t max_length) 
 {
         if (strlen(from) > max_length)
                 print_error("String copy exceeds max length %zu\n", max_length);

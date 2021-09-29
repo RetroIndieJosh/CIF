@@ -10,26 +10,13 @@
 #include "room.h"
 #include "text.h"
 
-#define TEST(msg, test, val, expected) \
-        printf("Testing %s...", msg); \
-        if (test(val, expected)) { \
-                ++pass; \
-        } \
-        ++tests; 
-
-#define TEST_START(test_name) \
-        int pass = 0;\
-        int tests = 0;\
-        printl("== TESTING %s ==\n", test_name);\
-
-#define TEST_END() \
-        printl("\nPassed %d/%d tests\n", pass, tests); \
-        return tests - pass;
-
-// TODO put rest of internal test headers here
+bool test_bool(bool val, bool expected);
+int test_int(int val, int expected);
 bool test_string_silent(const char *val, const char *expected);
+bool test_string(const char *val, const char *expected);
 
-bool test_bool(bool val, bool expected) {
+bool 
+test_bool(bool val, bool expected) {
         bool result = (val == expected);
         if (result) {
                 printl("PASS");
@@ -40,7 +27,8 @@ bool test_bool(bool val, bool expected) {
         return result;
 }
 
-int test_int(int val, int expected) {
+int 
+test_int(int val, int expected) {
         bool result = (val == expected);
         if (result) {
                 printl("PASS");
@@ -50,7 +38,8 @@ int test_int(int val, int expected) {
         return result;
 }
 
-bool test_string(const char *val, const char *expected) {
+bool 
+test_string(const char *val, const char *expected) {
         bool result = test_string_silent(val, expected);
 
         if (result) {
@@ -61,15 +50,17 @@ bool test_string(const char *val, const char *expected) {
         return result;
 }
 
-bool test_string_silent(const char *val, const char *expected) {
-        if (val == NULL) {
-                return (expected == NULL);
+bool 
+test_string_silent(const char *val, const char *expected) {
+        if (expected == NULL || val == NULL) {
+                return expected == NULL && val == NULL;
         } else { 
                return !strcmp(val, expected);
         }
 }
 
-int test_run_all()
+int 
+test_run_all()
 {
         int ret;
         
@@ -112,7 +103,8 @@ int test_run_all()
         return 0;
 }
 
-int test_run_game()
+int 
+test_run_game()
 {
         TEST_START("GAME");
 
@@ -124,17 +116,20 @@ int test_run_game()
         TEST_END();
 }
 
-int test_run_item()
+int 
+test_run_item()
 {
         return 0;
 }
 
-int test_run_limits()
+int 
+test_run_limits()
 {
         return 0;
 }
 
-int test_run_parser()
+int 
+test_run_parser()
 {
         TEST_START("PARSER");
 
@@ -207,18 +202,20 @@ int test_run_parser()
         TEST_END();
 }
 
-int test_run_math() 
+int 
+test_run_math() 
 {
         return 0;
 }
 
-int test_run_room()
+int 
+test_run_room()
 {
         return 0;
 }
 
-int test_run_text()
+int 
+test_run_text()
 {
         return 0;
 }
-

@@ -5,22 +5,19 @@
 #include "room.h"
 #include "text.h"
 
-struct Room room_list[32];
+room_t room_list[32];
 int room_count = 0;
 
-// private decls
 void room_list_items(int room_id);
 
-//
-// public
-//
-
-bool room_check_id(int room_id) 
+bool 
+room_check_id(int room_id) 
 {
         return check_id("room", room_id, room_count);
 }
 
-bool room_contains(int room_id, int item_id) 
+bool 
+room_contains(int room_id, int item_id) 
 {
         for (int i = 0; i < ITEMS_PER_ROOM; ++i) {
                 if (room_list[room_id].item_list[i] == item_id)
@@ -29,7 +26,8 @@ bool room_contains(int room_id, int item_id)
         return false;
 }
 
-int room_create(const char *name, const char *desc) 
+int 
+room_create(const char *name, const char *desc) 
 {
         if (room_count >= MAX_ROOMS)
                 return false;
@@ -38,7 +36,8 @@ int room_create(const char *name, const char *desc)
         return room_count++;
 }
 
-bool room_place_item(int room_id, int item_id) 
+bool 
+room_place_item(int room_id, int item_id) 
 {
         if (room_check_id(room_id) == false || item_check_id(item_id) == false)
                 return false;
@@ -48,7 +47,8 @@ bool room_place_item(int room_id, int item_id)
         return true;
 }
 
-struct Room *room_get(int room_id) 
+room_t *
+room_get(int room_id) 
 {
         if (room_check_id(room_id) == false)
                 return NULL;
@@ -59,15 +59,15 @@ struct Room *room_get(int room_id)
 // private
 //
 
-void room_list_items(int room_id) 
+void 
+room_list_items(int room_id) 
 {
         print("%d items\n", room_list[room_id].item_count);
         if (room_list[room_id].item_count == 0)
                 return;
         for (int i = 0; i < room_list[room_id].item_count; ++i) {
-                struct Item *item = item_get(room_list[room_id].item_list[i]);
+                item_t *item = item_get(room_list[room_id].item_list[i]);
                 print("%s ", item->name);
         }
         print("\n");
 }
-

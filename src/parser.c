@@ -15,7 +15,8 @@ void split_token(const char * input, int index, int start, int end);
 // public
 //
 
-const char *parser_get_token(int index) 
+const char *
+parser_get_token(int index) 
 {
         if (index >= token_count) {
                 return "";
@@ -23,7 +24,8 @@ const char *parser_get_token(int index)
         return tokens[index];
 }
 
-void parser_process(const char * input) 
+void 
+parser_process(const char * input) 
 {
         memset(&tokens, 0, TOKEN_LEN*TOKEN_COUNT);
         int start = 0;
@@ -50,7 +52,8 @@ void parser_process(const char * input)
 // private
 //
 
-void split_token(const char * input, int index, int start, int end) 
+void 
+split_token(const char * input, int index, int start, int end) 
 {
         if(start >= end)
                 return;
@@ -70,4 +73,3 @@ void split_token(const char * input, int index, int start, int end)
         int length = min(end - start + 1, TOKEN_LEN);
         strncpy(tokens[index], input+start, length);
 }
-

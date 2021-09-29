@@ -1,8 +1,4 @@
-#ifndef MATH_H
-#define MATH_H
+#pragma once
 
 int max(int a, int b);
 int min(int a, int b);
-
-#endif // MATH_H
-

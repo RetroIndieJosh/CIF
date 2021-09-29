@@ -1,5 +1,4 @@
-#ifndef LIMITS_H
-#define LIMITS_H
+#pragma once
 
 #include <stdbool.h>
 
@@ -15,5 +14,3 @@
 #define TOKEN_LEN 10
 
 bool check_id(const char *label, int id, int max);
-
-#endif // LIMITS_H

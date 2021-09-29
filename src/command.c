@@ -12,12 +12,12 @@
 // commands return whether a turn has been taken
 // in future, commands will have turn length and return int
 
-struct Command {
+typedef struct command_s {
         char verb[TOKEN_LEN];
         bool (*func)(const char *noun1, const char *noun2);
-};
+} command_t;
 
-struct Command command_list[MAX_COMMANDS];
+command_t command_list[MAX_COMMANDS];
 int command_count = 0;
 
 bool command_drop(const char *noun1, const char *noun2);
@@ -27,7 +27,10 @@ bool command_look(const char *noun1, const char *noun2);
 bool command_quit(const char *noun1, const char *noun2);
 bool command_use(const char *noun1, const char *noun2);
 
-int command_add(const char *verb, bool (*func)(const char*, const char*)) 
+typedef bool (*commandfunc_t)(const char*, const char*);
+
+int 
+command_add(const char *verb, commandfunc_t func)
 {
         string_copy(command_list[command_count].verb, verb, TOKEN_LEN);
         command_list[command_count].func = func;
@@ -36,7 +39,8 @@ int command_add(const char *verb, bool (*func)(const char*, const char*))
         return command_count++;
 }
 
-void command_init() 
+void 
+command_init() 
 {
         command_add("dr", &command_drop);
         command_add("drop", &command_drop);
@@ -50,7 +54,8 @@ void command_init()
         command_add("use", &command_use);
 }
 
-bool command_execute(const char *input) 
+bool 
+command_execute(const char *input) 
 {
         parser_process(input);
         const char *verb = parser_get_token(0);
@@ -68,13 +73,15 @@ bool command_execute(const char *input)
         return false;
 }
 
-bool command_drop(const char *noun1, const char *noun2) 
+bool 
+command_drop(const char *noun1, const char *noun2) 
 {
         print("Drop %s %s\n", noun1, noun2);
         return false;
 }
 
-bool command_get(const char *noun1, const char *noun2) 
+bool 
+command_get(const char *noun1, const char *noun2) 
 {
         if (is_empty(noun1)) {
                 printl("What would you like to get?");
@@ -94,21 +101,23 @@ bool command_get(const char *noun1, const char *noun2)
         return true;
 }
 
-bool command_inventory(const char *noun1, const char *noun2)
+bool 
+command_inventory(const char *noun1, const char *noun2)
 {
         print("Inventory %s %s\n", noun1, noun2);
         return false;
 }
 
-bool command_look(const char *noun1, const char *noun2) 
+bool 
+command_look(const char *noun1, const char *noun2) 
 {
         if (!is_empty(noun1) || !is_empty(noun2)) {
             printl("Just 'look' will suffice.");
             return false;
         }
 
-        struct Room *room = room_get(game_cur_room_id());
-        struct Item *room_item = item_get(room->self_item_id);
+        room_t *room = room_get(game_cur_room_id());
+        item_t *room_item = item_get(room->self_item_id);
 
         printl("-= %s =-", room_item->name);
         printl("%s", room_item->desc);
@@ -116,15 +125,16 @@ bool command_look(const char *noun1, const char *noun2)
         return false;
 }
 
-bool command_quit(const char *noun1, const char *noun2) 
+bool 
+command_quit(const char *noun1, const char *noun2) 
 {
         game_end();
         return true;
 }
 
-bool command_use(const char *noun1, const char *noun2) 
+bool 
+command_use(const char *noun1, const char *noun2) 
 {
         print("Use %s %s\n", noun1, noun2);
         return false;
 }
-

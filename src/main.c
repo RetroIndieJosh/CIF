@@ -11,7 +11,8 @@
 
 void process_args(int argc, char *argv[]);
 
-void process_args(int argc, char *argv[])
+void 
+process_args(int argc, char *argv[])
 {
         for (int i = 1; i < argc; ++i) {
                 char *arg = argv[i];
@@ -34,7 +35,8 @@ void process_args(int argc, char *argv[])
         }
 }
 
-int main(int argc, char *argv[]) 
+int 
+main(int argc, char *argv[]) 
 {
         process_args(argc, argv);
 
@@ -68,4 +70,3 @@ int main(int argc, char *argv[])
 
         return 0;
 }
-
