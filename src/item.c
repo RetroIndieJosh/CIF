@@ -6,6 +6,8 @@
 item_t item_list[MAX_ITEMS];
 int item_count = 0;
 
+item_t *item_get(int id);
+
 bool 
 item_check_id(int item_id) 
 {
@@ -44,6 +46,25 @@ item_get_id(const char *item_name)
         }
         return -1;
 }
+
+int 
+item_print_name(int item_id)
+{
+        item_t *item = item_get(item_id);
+        return print("%s", item->name);
+}
+
+int 
+item_print_desc(int item_id) 
+{
+        item_t *item = item_get(item_id);
+        return print("%s", item->desc);
+}
+
+
+//
+// private
+//
 
 item_t *
 item_get(int id)

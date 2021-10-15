@@ -129,16 +129,13 @@ command_look(const char *noun1, const char *noun2)
 {
         if (!is_empty(noun1) || !is_empty(noun2)) {
             printl("Just 'look' will suffice.");
-            return false;
+            return ERROR_ARG_EXTRA;
         }
 
-        room_t *room = room_get(game_cur_room_id());
-        item_t *room_item = item_get(room->self_item_id);
+        int room_id = game_cur_room_id();
+        room_print_full(room_id);
 
-        printl("-= %s =-", room_item->name);
-        printl("%s", room_item->desc);
-
-        return false;
+        return OK;
 }
 
 int 
@@ -156,16 +153,15 @@ command_move(const char *noun1, const char *noun2)
 
         direction_t direction = room_direction_from_string(noun1);
         int room_id = game_cur_room_id();
-        room_t *room = room_get(room_id);
-        if (room->exit[direction] == NOWHERE_ID) {
+        int new_room_id = room_get_exit(room_id, direction);
+        if (new_room_id == NOWHERE_ID) {
                 printl("No exit in that direction.");
                 return OK;
         }
 
-        int new_room_id = room->exit[direction];
-        room_t *new_room = room_get(new_room_id);
-        item_t *new_room_item = item_get(new_room->self_item_id);
-        printl("You move to %s.", new_room_item->name);
+        print("You move to ");
+        room_print_name(new_room_id);
+        printl(".");
         game_set_room(new_room_id);
         return OK;
 }

@@ -12,7 +12,8 @@ const int INVENTORY_ID = 1;
 room_t room_list[32];
 int room_count = 0;
 
-void room_list_items(int room_id);
+room_t *room_get(int id);
+int room_list_items(int room_id);
 
 bool 
 room_check_id(int room_id) 
@@ -54,6 +55,13 @@ room_direction_from_string(const char *str)
         return DIR_NONE;
 }
 
+int 
+room_get_exit(int room_id, direction_t direction)
+{
+        room_t *room = room_get(room_id);
+        return room->exit[direction];
+}
+
 bool 
 room_place_item(int room_id, int item_id) 
 {
@@ -65,13 +73,31 @@ room_place_item(int room_id, int item_id)
         return true;
 }
 
-// TODO should this be private?
-room_t *
-room_get(int room_id) 
+int 
+room_print_desc(int room_id)
 {
-        if (room_check_id(room_id) == false)
-                return NULL;
-        return &room_list[room_id];
+        room_t *room = room_get(room_id);
+        return item_print_desc(room->self_item_id);
+}
+
+int 
+room_print_name(int room_id)
+{
+        room_t *room = room_get(room_id);
+        return item_print_name(room->self_item_id);
+}
+
+int 
+room_print_full(int room_id)
+{
+        room_t *room = room_get(room_id);
+        int char_count = 0;
+        char_count += print("-= ");
+        char_count += item_print_name(room->self_item_id);
+        char_count += printl(" =-");
+        char_count += item_print_desc(room->self_item_id);
+        char_count += printl("");
+        return char_count;
 }
 
 int 
@@ -89,15 +115,25 @@ room_set_exit(int from_id, direction_t direction, int to_id)
 // private
 //
 
-void 
+room_t *
+room_get(int room_id) 
+{
+        if (room_check_id(room_id) == false)
+                return NULL;
+        return &room_list[room_id];
+}
+
+int 
 room_list_items(int room_id) 
 {
-        print("%d items\n", room_list[room_id].item_count);
+        int char_count = 0;
+        char_count += print("%d items\n", room_list[room_id].item_count);
         if (room_list[room_id].item_count == 0)
-                return;
+                return char_count;
         for (int i = 0; i < room_list[room_id].item_count; ++i) {
-                item_t *item = item_get(room_list[room_id].item_list[i]);
-                print("%s ", item->name);
+                char_count += item_print_name(room_list[room_id].item_list[i]);
+                char_count += print(" ");
         }
-        print("\n");
+        char_count += print("\n");
+        return char_count;
 }

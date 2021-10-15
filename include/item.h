@@ -22,4 +22,6 @@ bool item_check_id(int item_id);
 int item_create(const char *name, const char *desc);
 int item_create_type(const char *name, const char *desc, enum ItemType type);
 int item_get_id(const char *name);
-item_t *item_get(int id);
+int item_print_name(int item_id);
+int item_print_desc(int item_id);
+//item_t *item_get(int id);
