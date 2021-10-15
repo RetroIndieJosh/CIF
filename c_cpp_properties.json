@@ -1,23 +1,34 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**"
+        "env": {
+                "myDefaultIncludePath": [
+                        "${workspaceFolder}",
+                        "${workspaceFolder}/include"
                 ],
-                "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": ""
-            },
-            "includePath": [
-                    "/home/joshua/cif/include/*"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
-        }
-    ],
-    "version": 4
+                "myCompilerPath": "/usr/local/bin/gcc-7"
+        },
+        "configurations": [
+                {
+                        "name": "Linux",
+                        "intelliSenseMode": "gcc-x64",
+                        "includePath": [
+                                "${myDefaultIncludePath}"
+                        ],
+                        "macFrameworkPath": [
+                                "/System/Library/Frameworks"
+                        ],
+                        "defines": [
+                        ],
+                        "compilerPath": "/usr/bin/gcc",
+                        "cStandard": "c11",
+                        "cppStandard": "c++17",
+                        "browse": {
+                                "path": [
+                                        "${workspaceFolder}"
+                                ],
+                                "limitSymbolsToIncludedHeaders": true,
+                                "databaseFilename": ""
+                        }
+                }
+        ],
+        "version": 4
 }

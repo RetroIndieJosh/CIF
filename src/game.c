@@ -1,14 +1,21 @@
 #include <stdbool.h>
+#include <stdio.h>
 
+#include "command.h"
+#include "error.h"
+#include "item.h"
 #include "game.h"
+#include "room.h"
+#include "text.h"
 
 bool game_running = true;
+int cur_room = 0;
 
 // TODO should be part of player - location, from actor
 int 
 game_cur_room_id()
 {
-        return 0;
+        return cur_room;
 }
 
 void 
@@ -17,8 +24,73 @@ game_end()
         game_running = false;
 }
 
+int
+game_init()
+{
+        command_init();
+
+        // room 0 is nowhere
+        int nowhere_id = room_create("Nowhere", "");
+        if (nowhere_id != NOWHERE_ID) {
+                printl("ERROR: Nowhere ID %d is not room 0. Aborting initialization.");
+                return ERROR_INITIALIZATION;
+        }
+
+        int inventory_id = room_create("Inventory", "You are carrying:");
+        if (inventory_id != INVENTORY_ID) {
+                printl("ERROR: Inventory ID %d is not %d. Aborting initialization.", 
+                        inventory_id, INVENTORY_ID);
+                return ERROR_INITIALIZATION;
+        }
+
+        int kitchen_id = room_create("Kitchen", "A boring place to cook.");
+        int knife_id = item_create("knife", "It's sharp");
+        room_place_item(kitchen_id, knife_id);
+        int spatula_id = item_create("spatula", "Flips burgers and pancakes");
+        room_place_item(kitchen_id, spatula_id);
+
+        int bedroom_id = room_create("Bedroom", "There's a bed here.");
+        room_set_exit(kitchen_id, DIR_SOUTH, bedroom_id);
+
+        game_set_room(kitchen_id);
+
+        return OK;
+}
+
 bool 
 game_is_over() 
 {
         return game_running == false;
+}
+
+int
+game_run()
+{
+        while (game_is_over() == false) {
+                int ret = game_turn();
+                if (ret != 0)
+                        return ret;
+         }
+         return 0;
+}
+
+void
+game_set_room(int id)
+{
+        cur_room = id;
+        command_execute("look");
+}
+
+int
+game_turn()
+{
+        print(">> ");
+        char input[32];
+        if(fgets(input, 32, stdin) == NULL) {
+                print("Error processing input.");
+                return 1;
+        }
+        command_execute(input);
+        printl("");
+        return 0;
 }

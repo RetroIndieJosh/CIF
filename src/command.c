@@ -2,6 +2,7 @@
 
 #include "command.h"
 
+#include "error.h"
 #include "game.h"
 #include "item.h"
 #include "limits.h"
@@ -14,20 +15,25 @@
 
 typedef struct command_s {
         char verb[TOKEN_LEN];
-        bool (*func)(const char *noun1, const char *noun2);
+        int (*func)(const char *noun1, const char *noun2);
 } command_t;
 
 command_t command_list[MAX_COMMANDS];
 int command_count = 0;
 
-bool command_drop(const char *noun1, const char *noun2);
-bool command_get(const char *noun1, const char *noun2);
-bool command_inventory(const char *noun1, const char *noun2);
-bool command_look(const char *noun1, const char *noun2);
-bool command_quit(const char *noun1, const char *noun2);
-bool command_use(const char *noun1, const char *noun2);
+int command_drop(const char *noun1, const char *noun2);
+int command_get(const char *noun1, const char *noun2);
+int command_inventory(const char *noun1, const char *noun2);
+int command_look(const char *noun1, const char *noun2);
+int command_move(const char *noun1, const char *noun2);
+int command_move_east(const char *noun1, const char *noun2);
+int command_move_north(const char *noun1, const char *noun2);
+int command_move_south(const char *noun1, const char *noun2);
+int command_move_west(const char *noun1, const char *noun2);
+int command_quit(const char *noun1, const char *noun2);
+int command_use(const char *noun1, const char *noun2);
 
-typedef bool (*commandfunc_t)(const char*, const char*);
+typedef int (*commandfunc_t)(const char*, const char*);
 
 int 
 command_add(const char *verb, commandfunc_t func)
@@ -52,15 +58,25 @@ command_init()
         command_add("quit", &command_quit);
         command_add("take", &command_get);
         command_add("use", &command_use);
+
+        command_add("move", &command_move);
+        command_add("east", &command_move_east);
+        command_add("e", &command_move_east);
+        command_add("north", &command_move_north);
+        command_add("n", &command_move_north);
+        command_add("south", &command_move_south);
+        command_add("s", &command_move_south);
+        command_add("west", &command_move_west);
+        command_add("w", &command_move_west);
 }
 
-bool 
+int 
 command_execute(const char *input) 
 {
         parser_process(input);
         const char *verb = parser_get_token(0);
         if (verb == NULL || is_empty(verb)) {
-                return false;
+                return ERROR_DATA_MISSING;
         }
         const char *noun1 = parser_get_token(1);
         const char *noun2 = parser_get_token(2);
@@ -70,17 +86,17 @@ command_execute(const char *input)
                 return (*command_list[i].func)(noun1, noun2);
         }
         print("Sorry, I don't understand that. (No command '%s'.)\n", verb);
-        return false;
+        return ERROR_NO_MATCH;
 }
 
-bool 
+int 
 command_drop(const char *noun1, const char *noun2) 
 {
         print("Drop %s %s\n", noun1, noun2);
         return false;
 }
 
-bool 
+int 
 command_get(const char *noun1, const char *noun2) 
 {
         if (is_empty(noun1)) {
@@ -101,14 +117,14 @@ command_get(const char *noun1, const char *noun2)
         return true;
 }
 
-bool 
+int 
 command_inventory(const char *noun1, const char *noun2)
 {
         print("Inventory %s %s\n", noun1, noun2);
         return false;
 }
 
-bool 
+int 
 command_look(const char *noun1, const char *noun2) 
 {
         if (!is_empty(noun1) || !is_empty(noun2)) {
@@ -125,16 +141,69 @@ command_look(const char *noun1, const char *noun2)
         return false;
 }
 
-bool 
+int 
+command_move(const char *noun1, const char *noun2)
+{
+        if (is_empty(noun1)){
+                printl("You must specify a direction to move.");
+                return ERROR_ARG_MISSING;
+        }
+
+        if (!is_empty(noun2)) {
+                printl("You need only specify the direction.");
+                return ERROR_ARG_EXTRA;
+        }
+
+        direction_t direction = room_direction_from_string(noun1);
+        int room_id = game_cur_room_id();
+        room_t *room = room_get(room_id);
+        if (room->exit[direction] == NOWHERE_ID) {
+                printl("No exit in that direction.");
+                return OK;
+        }
+
+        int new_room_id = room->exit[direction];
+        room_t *new_room = room_get(new_room_id);
+        item_t *new_room_item = item_get(new_room->self_item_id);
+        printl("You move to %s.", new_room_item->name);
+        game_set_room(new_room_id);
+        return OK;
+}
+
+int 
+command_move_east(const char *noun1, const char *noun2)
+{
+        return command_move("east", noun1);
+}
+
+int 
+command_move_north(const char *noun1, const char *noun2)
+{
+        return command_move("east", noun1);
+}
+
+int 
+command_move_south(const char *noun1, const char *noun2)
+{
+        return command_move("south", noun1);
+}
+
+int 
+command_move_west(const char *noun1, const char *noun2)
+{
+        return command_move("west", noun1);
+}
+
+int 
 command_quit(const char *noun1, const char *noun2) 
 {
         game_end();
-        return true;
+        return OK;
 }
 
-bool 
+int 
 command_use(const char *noun1, const char *noun2) 
 {
         print("Use %s %s\n", noun1, noun2);
-        return false;
+        return ERROR_NOT_IMPLEMENTED;
 }

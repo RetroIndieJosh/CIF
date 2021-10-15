@@ -39,34 +39,8 @@ int
 main(int argc, char *argv[]) 
 {
         process_args(argc, argv);
-
-        command_init();
-        room_create("Inventory", "");
-
-        int id = room_create("Kitchen", "A boring place to cook.");
-        room_place_item(id,
-                item_create("knife", "It's sharp")
-                );
-        room_place_item(id,
-                item_create("spatula", "Flips burgers and pancakes")
-                );
-        printl("Created room %d:", id);
-
-        id = room_create("Bedroom", "There's a bed here.");
-        printl("Created room %d:", id);
-        command_execute("look");
-
-        while (game_is_over() == false) {
-                // prompt
-                print(">> ");
-                char input[32];
-                if(fgets(input, 32, stdin) == NULL) {
-                        print("Error processing input.");
-                        return 1;
-                }
-                command_execute(input);
-                printl("");
-         }
-
-        return 0;
+        int init_result = game_init();
+        if (init_result != 0)
+                return init_result;
+        return game_run();
 }

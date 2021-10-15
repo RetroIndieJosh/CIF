@@ -1,5 +1,9 @@
-actor.h and actor.c to define actor (an item) with mobility
-player is an actor
-
-change item printing to return Item type and print in some kind of "formatter"
-reinstate item listing for room description (in command_look)
+- get/drop items
+- inventory system
+- actor.h and actor.c to define actor (an item) with mobility
+- player is an actor
+- change item printing to return Item type and print in some kind of "formatter"
+- reinstate item listing for room description (in command_look)
+- convert all input to lowercase to avoid case sensitivity
+- abstract printing of room and item names so get_room and get_item can be private (although room needs get_item)
+- automatic connections (i.e. adding north exit should add exit back to south)
