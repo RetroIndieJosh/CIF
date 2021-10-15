@@ -1,0 +1,3 @@
+sudo apt install gcc
+sudo apt install libncurses-dev
+sudo apt install libconfig-dev

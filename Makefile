@@ -3,7 +3,7 @@
 .PHONY: clean
 .PHONY: rebuild
 
-CC=clang
+CC=gcc
 LDFLAGS=-lncurses -lconfig
 EXECUTABLE=cif
 
