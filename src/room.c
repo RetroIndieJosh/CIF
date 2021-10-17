@@ -6,8 +6,9 @@
 #include "room.h"
 #include "text.h"
 
-const int NOWHERE_ID = 0;
-const int INVENTORY_ID = 1;
+const int NO_ITEM = -1;
+const int NOWHERE_ID = -1;
+const int INVENTORY_ID = 0;
 
 room_t room_list[32];
 int room_count = 0;
@@ -15,7 +16,7 @@ int room_count = 0;
 room_t *room_get(int id);
 int room_list_items(int room_id);
 
-bool 
+int
 room_check_id(int room_id) 
 {
         return check_id("room", room_id, room_count);
@@ -38,6 +39,10 @@ room_create(const char *name, const char *desc)
                 return false;
         room_list[room_count].self_item_id = item_create_type(name, desc, ITYPE_ROOM);
         room_list[room_count].item_count = 0;
+        
+        for(int i = 0; i < ITEMS_PER_ROOM; ++i)
+                room_list[room_count].item_list[i] = -1;
+
         return room_count++;
 }
 
@@ -62,15 +67,34 @@ room_get_exit(int room_id, direction_t direction)
         return room->exit[direction];
 }
 
-bool 
-room_place_item(int room_id, int item_id) 
+int 
+room_item_add(int room_id, int item_id) 
 {
-        if (room_check_id(room_id) == false || item_check_id(item_id) == false)
-                return false;
+        if (room_check_id(room_id) != OK || item_check_id(item_id) != OK)
+                return ERROR_INVALID_TARGET;
         int i = room_list[room_id].item_count;
         room_list[room_id].item_list[i] = item_id;
         room_list[room_id].item_count++;
-        return true;
+        return OK;
+}
+
+int
+room_item_remove(int room_id, int item_id) 
+{
+        if (room_check_id(room_id) == false || item_check_id(item_id) == false)
+                return ERROR_INVALID_TARGET;
+
+        room_t *room = room_get(room_id);
+        for(int i = 0; i < room->item_count; ++i) {
+                if(room->item_list[i] != item_id)
+                        continue;
+                
+                // remove item and close gap
+                for(int k = i; k < room->item_count; ++k)
+                        room->item_list[k-1] = room->item_list[k];
+                return OK;
+        }
+        return ERROR_NO_MATCH;
 }
 
 int 
@@ -103,9 +127,18 @@ room_print_full(int room_id)
 int 
 room_set_exit(int from_id, direction_t direction, int to_id)
 {
+        if(direction >= DIR_COUNT)
+                return ERROR_OUT_OF_BOUNDS;
+
         room_t *from = room_get(from_id);
+        if (from == NULL)
+                return ERROR_INVALID_TARGET;
         if (from->exit[direction] != NOWHERE_ID)
-                return ERROR_ROOM_HAS_CONNECTION;
+                return ERROR_ILLEGAL_OVERWRITE;
+
+        int check_to = room_check_id(to_id);
+        if (check_to != OK)
+                return check_to;
 
         from->exit[direction] = to_id;
         return OK;
@@ -118,7 +151,7 @@ room_set_exit(int from_id, direction_t direction, int to_id)
 room_t *
 room_get(int room_id) 
 {
-        if (room_check_id(room_id) == false)
+        if (room_check_id(room_id) != OK)
                 return NULL;
         return &room_list[room_id];
 }

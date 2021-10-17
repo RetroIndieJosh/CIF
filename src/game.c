@@ -29,13 +29,7 @@ game_init()
 {
         command_init();
 
-        // room 0 is nowhere
-        int nowhere_id = room_create("Nowhere", "");
-        if (nowhere_id != NOWHERE_ID) {
-                printl("ERROR: Nowhere ID %d is not room 0. Aborting initialization.");
-                return ERROR_INITIALIZATION;
-        }
-
+        // room 0 is inventory
         int inventory_id = room_create("Inventory", "You are carrying:");
         if (inventory_id != INVENTORY_ID) {
                 printl("ERROR: Inventory ID %d is not %d. Aborting initialization.", 
@@ -45,9 +39,9 @@ game_init()
 
         int kitchen_id = room_create("Kitchen", "A boring place to cook.");
         int knife_id = item_create("knife", "It's sharp");
-        room_place_item(kitchen_id, knife_id);
+        room_item_add(kitchen_id, knife_id);
         int spatula_id = item_create("spatula", "Flips burgers and pancakes");
-        room_place_item(kitchen_id, spatula_id);
+        room_item_add(kitchen_id, spatula_id);
 
         int bedroom_id = room_create("Bedroom", "There's a bed here.");
         room_set_exit(kitchen_id, DIR_SOUTH, bedroom_id);
