@@ -1,16 +1,8 @@
-#include <stdlib.h>
 #include <string.h>
 
 #include "error.h"
 #include "item.h"
 #include "text.h"
-
-#define ITEM_CHECK(id) \
-        int err = item_check_id(id); \
-        if (err != OK) { \
-                printl("Tried to access item #%d but does not exist (error %d)", id, err); \
-                exit(err); \
-        }
 
 item_t item_list[MAX_ITEMS];
 int item_count = 0;

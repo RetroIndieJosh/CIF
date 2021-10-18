@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "error.h"
@@ -9,6 +10,13 @@
 const int NO_ITEM = -1;
 const int NOWHERE_ID = -1;
 const int INVENTORY_ID = 0;
+
+#define ROOM_CHECK(id) \
+        int room_err = room_check_id(id); \
+        if (room_err != OK) { \
+                printl("Tried to access room #%d but does not exist (error %d)", id, room_err); \
+                exit(room_err); \
+        }
 
 room_t room_list[32];
 int room_count = 0;
@@ -41,7 +49,10 @@ room_create(const char *name, const char *desc)
         room_list[room_count].item_count = 0;
         
         for(int i = 0; i < ITEMS_PER_ROOM; ++i)
-                room_list[room_count].item_list[i] = -1;
+                room_list[room_count].item_list[i] = NO_ITEM;
+
+        for(int i = 0; i < DIR_COUNT; ++i)
+                room_list[room_count].exit[i] = NOWHERE_ID;
 
         return room_count++;
 }
@@ -70,8 +81,8 @@ room_get_exit(int room_id, direction_t direction)
 int 
 room_item_add(int room_id, int item_id) 
 {
-        if (room_check_id(room_id) != OK || item_check_id(item_id) != OK)
-                return ERROR_INVALID_TARGET;
+        ROOM_CHECK(room_id);
+        ITEM_CHECK(item_id);
         int i = room_list[room_id].item_count;
         room_list[room_id].item_list[i] = item_id;
         room_list[room_id].item_count++;

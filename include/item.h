@@ -1,8 +1,16 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "limits.h"
+
+#define ITEM_CHECK(id) \
+        int item_err = item_check_id(id); \
+        if (item_err != OK) { \
+                printl("Tried to access item #%d but does not exist (error %d)", id, item_err); \
+                exit(item_err); \
+        }
 
 enum ItemType {
     ITYPE_ITEM = 0,
