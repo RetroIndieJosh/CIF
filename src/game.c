@@ -31,14 +31,14 @@ game_end()
 int
 game_init()
 {
+        display_init(80, 25, 24);
+
         command_init();
 
         // TODO check error
         game_load();
 
-        display_init(80, 25, 24);
-
-        return OK;
+        return ERROR_OK;
 }
 
 bool 
@@ -50,10 +50,17 @@ game_is_over()
 int
 game_run()
 {
-        /*
-        while (game_is_over() == false)
+        input_set_prompt(">> ");
+
+        while (game_is_over() == false) {
+                display_update();
                 input_update();
-         */
+                if (input_is_ready()) {
+                        const char * const input = input_get();
+                        command_execute(input);
+                        input_clear();
+                }
+        }
 
         display_destroy();
         error_print();
@@ -65,21 +72,6 @@ game_set_room(int id)
 {
         cur_room = id;
         command_execute("look");
-}
-
-int
-game_turn()
-{
-        print(">> ");
-        char input[32];
-        if(fgets(input, 32, stdin) == NULL) {
-                print("Error processing input.");
-                return 1;
-        }
-        command_execute(input);
-        printl("");
-        //display_update();
-        return 0;
 }
 
 int
@@ -104,5 +96,5 @@ game_load()
 
         game_set_room(kitchen_id);
 
-        return OK;
+        return ERROR_OK;
 }

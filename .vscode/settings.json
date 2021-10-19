@@ -1,6 +1,7 @@
 {
         "files.associations": {
                 "game.h": "c",
-                "room.h": "c"
+                "room.h": "c",
+                "error.h": "c"
         }
 }

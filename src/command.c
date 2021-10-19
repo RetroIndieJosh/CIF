@@ -22,6 +22,7 @@ typedef struct command_s {
 command_t command_list[MAX_COMMANDS];
 int command_count = 0;
 
+int command_clear(const char *noun1, const char *noun2);
 int command_drop(const char *noun1, const char *noun2);
 int command_get(const char *noun1, const char *noun2);
 int command_inventory(const char *noun1, const char *noun2);
@@ -49,6 +50,9 @@ command_add(const char *verb, commandfunc_t func)
 void 
 command_init() 
 {
+        command_add("clear", &command_clear);
+        command_add("clearscreen", &command_clear);
+        command_add("cls", &command_clear);
         command_add("dr", &command_drop);
         command_add("drop", &command_drop);
         command_add("get", &command_get);
@@ -91,10 +95,17 @@ command_execute(const char *input)
 }
 
 int 
+command_clear(const char *noun1, const char *noun2)
+{
+        display_clear();
+        return ERROR_OK;
+}
+
+int 
 command_drop(const char *noun1, const char *noun2) 
 {
         print("Drop %s %s\n", noun1, noun2);
-        return false;
+        return ERROR_NOT_IMPLEMENTED;
 }
 
 int 
@@ -136,7 +147,7 @@ command_look(const char *noun1, const char *noun2)
         int room_id = game_cur_room_id();
         room_print_full(room_id);
 
-        return OK;
+        return ERROR_OK;
 }
 
 int 
@@ -157,14 +168,14 @@ command_move(const char *noun1, const char *noun2)
         int new_room_id = room_get_exit(room_id, direction);
         if (new_room_id == NOWHERE_ID) {
                 printl("No exit in that direction.");
-                return OK;
+                return ERROR_OK;
         }
 
         print("You move to ");
         room_print_name(new_room_id);
         printl(".");
         game_set_room(new_room_id);
-        return OK;
+        return ERROR_OK;
 }
 
 int 
@@ -195,7 +206,7 @@ int
 command_quit(const char *noun1, const char *noun2) 
 {
         game_end();
-        return OK;
+        return ERROR_OK;
 }
 
 int 

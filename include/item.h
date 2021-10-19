@@ -7,7 +7,7 @@
 
 #define ITEM_CHECK(id) \
         int item_err = item_check_id(id); \
-        if (item_err != OK) { \
+        if (item_err != ERROR_OK) { \
                 printl("Tried to access item #%d but does not exist (error %d)", id, item_err); \
                 exit(item_err); \
         }

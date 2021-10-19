@@ -18,6 +18,26 @@ WINDOW *out_win;
 
 void display_init_colors();
 
+void 
+display_clear()
+{
+        clear();
+        display_clear_output();
+        display_clear_input();
+}
+
+void 
+display_clear_input()
+{
+        wclear(in_win);
+}
+
+void 
+display_clear_output()
+{
+        wclear(out_win);
+}
+
 void
 display_destroy()
 {
@@ -54,10 +74,9 @@ display_init(int console_width, int console_height, int out_height)
         //keypad(in_win, true);
         //keypad(out_win, true);
 
-        wprintw(out_win, "Initialized output window");
+        wprintw(out_win, "Initialized output window\n");
         display_update();
         wmove(in_win, 0, 0);
-        wgetch(in_win);
 
         return OK;
 }
@@ -74,6 +93,12 @@ void
 display_write_input(char ch)
 {
         waddch(in_win, ch);
+}
+
+void
+display_write_input_str(const char * const str)
+{
+        wprintw(in_win, "%s", str);
 }
 
 int 
@@ -93,10 +118,11 @@ printl(const char *format, ...)
         va_list args;
         va_start(args, format);
         //int chars = vfprintf(stdout, format, args);
+        //fprintf(stdout, "\n");
         int chars = vw_printw(out_win, format, args);
-        fprintf(stdout, "\n");
+        wprintw(out_win, "\n");
         va_end(args);
-        return chars;
+        return chars+1;
 }
 
 int 

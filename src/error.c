@@ -15,7 +15,7 @@ error_print()
 {
         int len = 0;
 
-        if (error == OK)
+        if (error == ERROR_OK)
                 return printf("No errors\n");
         
         printf("Error:\n");

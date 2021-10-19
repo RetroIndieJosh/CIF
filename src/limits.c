@@ -11,6 +11,6 @@ check_id(const char *label, int id, int max)
                 printf("%s ID %d is invalid (0-%d)", label, id, max - 1);
                 return ERROR_INVALID_TARGET;
         }
-        return OK;
+        return ERROR_OK;
 }
 

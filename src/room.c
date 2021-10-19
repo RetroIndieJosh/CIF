@@ -14,7 +14,7 @@ const int INVENTORY_ID = 0;
 
 #define ROOM_CHECK(id) \
         int room_err = room_check_id(id); \
-        if (room_err != OK) { \
+        if (room_err != ERROR_OK) { \
                 printl("Tried to access room #%d but does not exist (error %d)", id, room_err); \
                 exit(room_err); \
         }
@@ -87,7 +87,7 @@ room_item_add(int room_id, int item_id)
         int i = room_list[room_id].item_count;
         room_list[room_id].item_list[i] = item_id;
         room_list[room_id].item_count++;
-        return OK;
+        return ERROR_OK;
 }
 
 int
@@ -104,7 +104,7 @@ room_item_remove(int room_id, int item_id)
                 // remove item and close gap
                 for(int k = i; k < room->item_count; ++k)
                         room->item_list[k-1] = room->item_list[k];
-                return OK;
+                return ERROR_OK;
         }
         return ERROR_NO_MATCH;
 }
@@ -149,11 +149,11 @@ room_set_exit(int from_id, direction_t direction, int to_id)
                 return ERROR_ILLEGAL_OVERWRITE;
 
         int check_to = room_check_id(to_id);
-        if (check_to != OK)
+        if (check_to != ERROR_OK)
                 return check_to;
 
         from->exit[direction] = to_id;
-        return OK;
+        return ERROR_OK;
 }
 
 // 
@@ -163,7 +163,7 @@ room_set_exit(int from_id, direction_t direction, int to_id)
 room_t *
 room_get(int room_id) 
 {
-        if (room_check_id(room_id) != OK)
+        if (room_check_id(room_id) != ERROR_OK)
                 return NULL;
         return &room_list[room_id];
 }

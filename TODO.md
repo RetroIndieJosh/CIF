@@ -2,8 +2,8 @@
 
 ## Features
 
-- add newlines to unit test, limits (and maybe other?) printfs
-- (in progress) ncurses framework for color output, formatting, and separate parser input location
+- output window scrolling
+- add newlines to limits (and maybe other?) printfs
 
 - get/drop items
 - inventory system
@@ -19,4 +19,4 @@
 
 ## Bugs
 
-- fails final parser test
+- single character aliases are not working
