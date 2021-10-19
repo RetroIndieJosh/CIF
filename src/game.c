@@ -2,7 +2,9 @@
 #include <stdio.h>
 
 #include "command.h"
+#include "display.h"
 #include "error.h"
+#include "input.h"
 #include "item.h"
 #include "game.h"
 #include "room.h"
@@ -10,6 +12,8 @@
 
 bool game_running = true;
 int cur_room = 0;
+
+int game_load();
 
 // TODO should be part of player - location, from actor
 int 
@@ -29,24 +33,10 @@ game_init()
 {
         command_init();
 
-        // room 0 is inventory
-        int inventory_id = room_create("Inventory", "You are carrying:");
-        if (inventory_id != INVENTORY_ID) {
-                printl("ERROR: Inventory ID %d is not %d. Aborting initialization.", 
-                        inventory_id, INVENTORY_ID);
-                return ERROR_INITIALIZATION;
-        }
+        // TODO check error
+        game_load();
 
-        int kitchen_id = room_create("Kitchen", "A boring place to cook.");
-        int knife_id = item_create("knife", "It's sharp");
-        room_item_add(kitchen_id, knife_id);
-        int spatula_id = item_create("spatula", "Flips burgers and pancakes");
-        room_item_add(kitchen_id, spatula_id);
-
-        int bedroom_id = room_create("Bedroom", "There's a bed here.");
-        room_set_exit(kitchen_id, DIR_SOUTH, bedroom_id);
-
-        game_set_room(kitchen_id);
+        //display_init(80, 25, 24);
 
         return OK;
 }
@@ -61,11 +51,15 @@ int
 game_run()
 {
         while (game_is_over() == false) {
+                //input_update();
                 int ret = game_turn();
                 if (ret != 0)
                         return ret;
          }
-         return 0;
+
+        //display_destroy();
+        error_print();
+        return 0;
 }
 
 void
@@ -86,5 +80,31 @@ game_turn()
         }
         command_execute(input);
         printl("");
+        //display_update();
         return 0;
+}
+
+int
+game_load()
+{ 
+        // room 0 is inventory
+        int inventory_id = room_create("Inventory", "You are carrying:");
+        if (inventory_id != INVENTORY_ID) {
+                printl("ERROR: Inventory ID %d is not %d. Aborting initialization.", 
+                        inventory_id, INVENTORY_ID);
+                return ERROR_INITIALIZATION;
+        }
+
+        int kitchen_id = room_create("Kitchen", "A boring place to cook.");
+        int knife_id = item_create("knife", "It's sharp");
+        room_item_add(kitchen_id, knife_id);
+        int spatula_id = item_create("spatula", "Flips burgers and pancakes");
+        room_item_add(kitchen_id, spatula_id);
+
+        int bedroom_id = room_create("Bedroom", "There's a bed here.");
+        room_set_exit(kitchen_id, DIR_SOUTH, bedroom_id);
+
+        game_set_room(kitchen_id);
+
+        return OK;
 }

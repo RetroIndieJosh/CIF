@@ -18,14 +18,14 @@ process_args(int argc, char *argv[])
                 char *arg = argv[i];
                 if(arg[0] != '-') {
                         // TODO read game file here
-                        printl("Invalid argument %s", arg);
+                        printf("Invalid argument %s\n", arg);
                         exit(1);
                 }
                 if (!strcmp(arg, "-h") || !strcmp(arg, "--help")) {
-                        printl("%s [game file] {-h/--help} {-t/--test}", argv[0]);
-                        printl("\t-h/--help    display this text and exit");
-                        printl("\t-t/--test    run unit tests and exit");
-                        printl("");
+                        printf("%s [game file] {-h/--help} {-t/--test}\n", argv[0]);
+                        printf("\t-h/--help    display this text and exit\n");
+                        printf("\t-t/--test    run unit tests and exit\n");
+                        printf("\n");
                         exit(0);
                 }
                 if (!strcmp(arg, "-t") || !strcmp(arg, "--test")) {

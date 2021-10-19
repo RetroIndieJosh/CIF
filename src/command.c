@@ -2,6 +2,7 @@
 
 #include "command.h"
 
+#include "display.h"
 #include "error.h"
 #include "game.h"
 #include "item.h"

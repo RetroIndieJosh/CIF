@@ -2,7 +2,8 @@
 
 ## Features
 
-- implement ROOM_CHECK modeled after ITEM_CHECK
+- add newlines to unit test, limits (and maybe other?) printfs
+- (in progress) ncurses framework for color output, formatting, and separate parser input location
 
 - get/drop items
 - inventory system
@@ -12,7 +13,6 @@
 - reinstate item listing for room description (in command_look)
 - convert all input to lowercase to avoid case sensitivity
 - automatic connections (i.e. adding north exit should add exit back to south)
-- ncurses framework for color output, formatting, and separate parser input location
 
 - MORE TESTS, maybe use an actual framework?
 - at the very least red FAIL and green OK

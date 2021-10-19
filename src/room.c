@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "display.h"
 #include "error.h"
 #include "item.h"
 #include "room.h"
