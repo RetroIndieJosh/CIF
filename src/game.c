@@ -36,7 +36,7 @@ game_init()
         // TODO check error
         game_load();
 
-        //display_init(80, 25, 24);
+        display_init(80, 25, 24);
 
         return OK;
 }
@@ -50,14 +50,12 @@ game_is_over()
 int
 game_run()
 {
-        while (game_is_over() == false) {
-                //input_update();
-                int ret = game_turn();
-                if (ret != 0)
-                        return ret;
-         }
+        /*
+        while (game_is_over() == false)
+                input_update();
+         */
 
-        //display_destroy();
+        display_destroy();
         error_print();
         return 0;
 }

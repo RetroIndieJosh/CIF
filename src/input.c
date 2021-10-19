@@ -26,13 +26,8 @@ void
 input_update()
 {
         int ch = getch();
-        if (ch == 'q') {
-                game_end();
-                return;
-        }
-        // scan for input
         // if over INPUT_MAX, return
-        // add to input
-        // inc input_length
+        input[input_length++] = ch;
+        display_write_input(ch);
         // if enter - process? send to command? (too tightly linked) flag ready?
 }
