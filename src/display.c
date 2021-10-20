@@ -1,10 +1,13 @@
 #include <ncurses.h>
 
 #include "display.h"
+#include "error.h"
 
 #define COLOR_ERROR COLOR_PAIR(COLOR_ERROR_ID)
 #define COLOR_INPUT COLOR_PAIR(COLOR_INPUT_ID)
 #define COLOR_OUTPUT COLOR_PAIR(COLOR_OUTPUT_ID)
+
+#define BUFF_SIZE 1024
 
 enum {
         COLOR_NONE, // colors start at 1
@@ -62,6 +65,7 @@ display_init(int console_width, int console_height, int out_height)
         out_win = newwin(out_height, console_width, 0, 0);
         wbkgd(out_win, COLOR_OUTPUT);
         wclear(out_win);
+        scrollok(out_win, true);
 
         int in_height = console_height - out_height;
         in_win = newwin(in_height, console_width, out_height, 0);
@@ -106,9 +110,30 @@ print(const char *format, ...)
 {
         va_list args;
         va_start(args, format);
-        //int chars = vfprintf(stdout, format, args);
-        int chars = vw_printw(out_win, format, args);
+        char buffer[BUFF_SIZE];
+        int chars = vsprintf(buffer, format, args);
         va_end(args);
+
+        if (chars >= BUFF_SIZE) {
+                error_set(ERROR_MAX_EXCEEDED);
+                return -1;
+        }
+
+        int line_count = 0;
+        for (int i = 0; i < BUFF_SIZE; ++i) {
+                if (buffer[i] == '\n')
+                        ++line_count;
+                if (buffer[i] == '\0')
+                        break;
+        }
+
+        //int chars = vfprintf(stdout, format, args);
+        //int chars = vw_printw(out_win, format, args);
+
+        wprintw(out_win, buffer);
+        if (line_count > 0)
+                wscrl(out_win, line_count);
+        //scroll(out_win);
         return chars;
 }
 

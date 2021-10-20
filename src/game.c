@@ -57,6 +57,7 @@ game_run()
                 input_update();
                 if (input_is_ready()) {
                         const char * const input = input_get();
+                        printl(">> %s\n", input);
                         command_execute(input);
                         input_clear();
                 }
