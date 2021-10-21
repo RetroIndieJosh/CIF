@@ -42,12 +42,14 @@ command_add(const char *verb, commandfunc_t func)
 {
         string_copy(command_list[command_count].verb, verb, TOKEN_LEN);
         command_list[command_count].func = func;
+        /*
         print("Added command '%s' => %p\n", command_list[command_count].verb, 
                         command_list[command_count].func);
+        */
         return command_count++;
 }
 
-void 
+int
 command_init() 
 {
         command_add("clear", &command_clear);
@@ -73,6 +75,8 @@ command_init()
         command_add("s", &command_move_south);
         command_add("west", &command_move_west);
         command_add("w", &command_move_west);
+
+        return command_count;
 }
 
 int 
@@ -173,9 +177,10 @@ command_move(const char *noun1, const char *noun2)
 
         print("You move to ");
         room_print_name(new_room_id);
-        printl(".");
+        printl(".\n");
+
         game_set_room(new_room_id);
-        return ERROR_OK;
+        return command_execute("look");
 }
 
 int 

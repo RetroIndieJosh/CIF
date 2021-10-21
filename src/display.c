@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <stdarg.h>
 
 #include "display.h"
 #include "error.h"
@@ -110,6 +111,7 @@ print(const char *format, ...)
 {
         va_list args;
         va_start(args, format);
+
         char buffer[BUFF_SIZE];
         int chars = vsprintf(buffer, format, args);
         va_end(args);
@@ -130,7 +132,7 @@ print(const char *format, ...)
         //int chars = vfprintf(stdout, format, args);
         //int chars = vw_printw(out_win, format, args);
 
-        wprintw(out_win, buffer);
+        wprintw(out_win, "%s", buffer);
         if (line_count > 0)
                 wscrl(out_win, line_count);
         //scroll(out_win);
@@ -142,10 +144,16 @@ printl(const char *format, ...)
 {
         va_list args;
         va_start(args, format);
-        //int chars = vfprintf(stdout, format, args);
-        //fprintf(stdout, "\n");
+
+        /*
+        int chars = print(format, args);
+        chars += print("\n");
+        //*/
+        //*
         int chars = vw_printw(out_win, format, args);
         wprintw(out_win, "\n");
+        //*/
+
         va_end(args);
         return chars+1;
 }

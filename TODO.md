@@ -2,7 +2,7 @@
 
 ## Features
 
-- output window scrolling
+- remove ERROR_OK and use set_error instead of returning errors
 - add newlines to limits (and maybe other?) printfs
 
 - get/drop items

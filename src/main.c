@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "command.h"
+#include "error.h"
 #include "game.h"
 #include "item.h"
 #include "room.h"
@@ -40,8 +41,11 @@ int
 main(int argc, char *argv[]) 
 {
         process_args(argc, argv);
-        int init_result = game_init();
-        if (init_result != 0)
-                return init_result;
+        bool inited = game_init();
+        if (inited == false) {
+                error_set(ERROR_INITIALIZATION);
+                return 1;
+        }
+
         return game_run();
 }

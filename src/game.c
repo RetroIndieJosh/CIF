@@ -13,7 +13,7 @@
 bool game_running = true;
 int cur_room = 0;
 
-int game_load();
+bool game_load();
 
 // TODO should be part of player - location, from actor
 int 
@@ -28,17 +28,36 @@ game_end()
         game_running = false;
 }
 
-int
+bool
 game_init()
 {
+        const char *title = "CIF // C Interactive Fiction\n"
+                "A basic parser-based IF system\n"
+                "By Joshua McLean (c) 2021 All Rights Reserved\n\n";
+
+        printf("%s", title);
+
+        printf("Initializing display...\n\n");
         display_init(80, 25, 24);
 
-        command_init();
+        printl("%s", title);
 
-        // TODO check error
-        game_load();
+        print("Initializing commands...");
+        int cmd_count = command_init();
+        printl("OK (%d cmds)", cmd_count);
 
-        return ERROR_OK;
+        print("Loading game data...");
+        bool loaded = game_load();
+        if (loaded == false) {
+                printl("ERROR");
+                return false;
+        }
+
+        printl("OK");
+
+        printl("");
+
+        return true;
 }
 
 bool 
@@ -50,6 +69,8 @@ game_is_over()
 int
 game_run()
 {
+        // TODO game intro here
+        command_execute("look");
         input_set_prompt(">> ");
 
         while (game_is_over() == false) {
@@ -72,10 +93,9 @@ void
 game_set_room(int id)
 {
         cur_room = id;
-        command_execute("look");
 }
 
-int
+bool
 game_load()
 { 
         // room 0 is inventory
@@ -83,7 +103,8 @@ game_load()
         if (inventory_id != INVENTORY_ID) {
                 printl("ERROR: Inventory ID %d is not %d. Aborting initialization.", 
                         inventory_id, INVENTORY_ID);
-                return ERROR_INITIALIZATION;
+                error_set(ERROR_INITIALIZATION);
+                return false;
         }
 
         int kitchen_id = room_create("Kitchen", "A boring place to cook.");
@@ -97,5 +118,5 @@ game_load()
 
         game_set_room(kitchen_id);
 
-        return ERROR_OK;
+        return true;
 }
